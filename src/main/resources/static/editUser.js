@@ -1,107 +1,46 @@
-async function editUser(modal, id) {
-    let oneUser = await userFetch.findOneUser(id);
-    let user = oneUser.json();
+function editUser() {
 
-    modal.find('.modal-title').html('Edit user');
+    let form = window.formEditUser.editRoles;
+    let new_Roles = "";
 
-    let editButton = `<button  class="btn btn-info" id="editButton">Edit</button>`;
-    let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
-    modal.find('.modal-footer').append(editButton);
-    modal.find('.modal-footer').append(closeButton);
+    let rolesList = document.createElement('ul');
 
-    user.then(user => {
-        let bodyForm = `
-            <form class="form-group text-center" id="editUser">
-               <div class="form-group">
-                    <label for="userId" class="col-form-label">ID</label>
-                    <input type="text" class="form-control username" id="userId" value="${user.userId}" readonly>
-               </div>
-                   
-               <div class="form-group">
-                    <label for="username" class="col-form-label">Username</label>
-                    <input type="text" class="form-control username" id="username" value="${user.username}">
-               </div>
+    for (var i = 0; i < form.length; i++) {
+        var option = form.options[i];
+        let role = document.createElement('li');
+        if (option.selected) {
+            new_Roles = new_Roles.concat(option.value + (i != (form.length - 1) ? "," : ""));
 
-                <div class="form-group">
-                    <label for="password" class="com-form-label">Password</label>
-                    <input type="password" class="form-control" id="password" value="${user.password}">
-                </div>
+            role.textContent = option.value + " ";
+            rolesList.appendChild(role);
+        }
+    }
 
-                <div class="form-group">
-                    <label for="name" class="com-form-label">Name</label>
-                    <input type="text" class="form-control" id="name" value="${user.name}">
-                </div>
+    let id = window.formEditUser.editID.value;
 
-                <div class="form-group">
-                    <label for="surname" class="com-form-label">Surname</label>
-                    <input type="text" class="form-control" id="surname" value="${user.surname}">
-                </div>
-
-                <div class="form-group">
-                    <label for="age" class="com-form-label">Age</label>
-                    <input type="number" class="form-control" id="age" value="${user.age}">
-                </div>
-
-                <div class="form-group">
-                    <label for="email" class="com-form-label">Email</label>
-                    <input type="text" class="form-control" id="email" value="${user.email}">
-                </div>
-                
-                <div class="form-group">
-                    <label for="roles" class="com-form-label">Role</label>
-                    <select multiple id="roles" size="2" class="form-control" style="max-height: 100px">
-                    <option value="ROLE_USER">USER</option>
-                    <option value="ROLE_ADMIN">ADMIN</option>
-                    </select>
-                </div>
-            </form>
-        `;
-        modal.find('.modal-body').append(bodyForm);
+    fetch('http://localhost:8080/edit', {
+        method: 'PUT',
+        body: JSON.stringify({
+            id: window.formEditUser.editID.value,
+            firstName: window.formEditUser.editFirstName.value,
+            lastName: window.formEditUser.editLastName.value,
+            age: window.formEditUser.editAge.value,
+            username: window.formEditUser.editUsername.value,
+            password: window.formEditUser.editPassword.value,
+            roles: new_Roles
+        }),
+        headers: {"Content-type": "application/json; charset=UTF-8"}
     })
-
-    $("#editButton").on('click', async () => {
-        let checkedRoles = () => {
-            let array = []
-            let options = document.querySelector('#roles').options
-            for (let i = 0; i < options.length; i++) {
-                if (options[i].selected) {
-                    array.push(roleList[i])
-                }
-            }
-            return array;
-        }
-        let userId = modal.find("#userId").val().trim();
-        let username = modal.find("#username").val().trim();
-        let password = modal.find("#password").val().trim();
-        let name = modal.find("#name").val().trim();
-        let surname = modal.find("#surname").val().trim();
-        let age = modal.find("#age").val().trim();
-        let email = modal.find("#email").val().trim();
-        let data = {
-            userId: userId,
-            username: username,
-            password: password,
-            name: name,
-            surname: surname,
-            age: age,
-            email: email,
-            roles: checkedRoles()
-
-        }
-        const response = await userFetch.updateUser(data, id);
-
-        if (response.ok) {
-            await getUsers();
-            modal.modal('hide');
-        } else {
-            let body = await response.json();
-            let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="messageError">
-                            ${body.info}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>`;
-            modal.find('.modal-body').prepend(alert);
-        }
-    })
+        .then(response => {
+            $('#' + id).replaceWith('<tr id=' + id + '>' +
+                '<td>' + id + '</td>' +
+                '<td>' + window.formEditUser.editFirstName.value + '</td>' +
+                '<td>' + window.formEditUser.editLastName.value + '</td>' +
+                '<td>' + window.formEditUser.editAge.value + '</td>' +
+                '<td>' + window.formEditUser.editUsername.value + '</td>' +
+                '<td>' + rolesList.textContent + '</td>' +
+                '<td> <button type="button" onclick="modalEdit(' + id + ')" class="btn btn-info">Edit</button> </td>' +
+                '<td> <button type="button" onclick="modalDelete(' + id + ')" class="btn btn-danger">Delete</button> </td>' +
+                '</tr>');
+        });
 }

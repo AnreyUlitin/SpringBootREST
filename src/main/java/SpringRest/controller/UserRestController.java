@@ -12,8 +12,8 @@ import SpringRest.service.UserService;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
 @RestController
-@RequestMapping("api/")
 public class UserRestController {
 
     private final UserService userService;
@@ -30,7 +30,6 @@ public class UserRestController {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-
     @GetMapping("/getAllRoles")
     public ResponseEntity<List<Role>> getAllRoles() {
         return ResponseEntity.ok().body(roleService.getAllRoles());
@@ -42,14 +41,13 @@ public class UserRestController {
         return ResponseEntity.ok().body(userService.getUserById(id));
     }
 
-
-    @PostMapping(value = "/create")
-    public ResponseEntity<User> createNewUser(@RequestBody User user) {
+    @PostMapping("/create")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         userService.addUser(user);
         return ResponseEntity.ok().body(user);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/edit")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return ResponseEntity.ok().body(user);
@@ -62,7 +60,6 @@ public class UserRestController {
     }
 
 }
-
 
 
 
