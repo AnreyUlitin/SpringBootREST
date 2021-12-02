@@ -84,11 +84,11 @@ public class UserController {
         return "redirect:/admin";
     }
 
-//    @DeleteMapping("delete/{id}")
-//    public String delete(@PathVariable Long id) {
-//        userService.deleteUserById(id);
-//        return "redirect:/admin";
-//    }
+    @DeleteMapping("delete/{id}")
+    public String delete(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return "redirect:/admin";
+    }
 
 }
 
