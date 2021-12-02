@@ -1,3 +1,5 @@
+userInfo();
+
 function userInfo(user) {
     //запрос на получение данных в виде json
     fetch('http://localhost:8080/getAuthorizedUser')
@@ -15,9 +17,9 @@ function userInfo(user) {
             var cell0 = row.insertCell(0);
             cell0.innerHTML = user.id;
             var cell1 = row.insertCell(1);
-            cell1.innerHTML = user.firstname;
+            cell1.innerHTML = user.firstName;
             var cell2 = row.insertCell(2);
-            cell2.innerHTML = user.lastname;
+            cell2.innerHTML = user.lastName;
             var cell3 = row.insertCell(3);
             cell3.innerHTML = user.age;
             var cell4 = row.insertCell(4);

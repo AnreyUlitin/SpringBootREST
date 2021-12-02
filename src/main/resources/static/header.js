@@ -1,3 +1,4 @@
+Header();
 
 function Header() {
     //запрос на получение данных в виде json

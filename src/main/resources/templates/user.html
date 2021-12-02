@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
 <nav class="navbar navbar-dark bg-dark">
 
     <a class="navbar-brand" href="#">
-        <strong><span th:text="${user.username}"></span></strong> with roles: <span th:text="${user.roles}"></span>
+        <strong><span id="header_email"></span></strong><span id="header_roles"></span>
     </a>
     <ul class="nav navbar-nav navbar-right">
         <li class="nav-item">
@@ -60,9 +60,8 @@
             </div>
         </div>
     </div>
+</div>
 
-</div>
-</div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

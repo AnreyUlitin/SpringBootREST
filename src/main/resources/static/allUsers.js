@@ -1,4 +1,4 @@
-
+allUsers();
 
 function allUsers() {
     let tBody = document.getElementById("tBody");
