@@ -1,18 +1,12 @@
 package SpringRest.model;
 
+import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
 import java.util.Set;
 
 
-;
+
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
@@ -24,6 +18,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "role")
     private String role;
 
+    @Transient
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 

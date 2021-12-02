@@ -3,6 +3,8 @@ package SpringRest.controller;
 
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.security.core.context.*;
 import org.springframework.web.bind.annotation.*;
 import SpringRest.model.Role;
 import SpringRest.model.User;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class UserRestController {
 
     private final UserService userService;
@@ -25,43 +27,48 @@ public class UserRestController {
     }
 
     @GetMapping("/getAllUsers") //работает в почтальоне
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-    @GetMapping("/getAllRoles") //работате в почтальоне
-    public List<Role> getAllRoles() {
-        return roleService.getAllRoles();
+
+    @GetMapping("/getAllRoles") //работает в почтальоне
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return ResponseEntity.ok().body(roleService.getAllRoles());
     }
 
-    @GetMapping("/getUserById/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) { //работате в почтальоне
-        return userService.getUserById(id);
+
+    @GetMapping("/getUserById/{id}")  //работает в почтальоне
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.getUserById(id));
     }
 
-    @PostMapping(value = "/create")      // работате в почтальоне
-    public User createNewUser(@RequestBody User user) {
+
+    @PostMapping(value = "/create") // работает в почтальоне
+    public ResponseEntity<User> createNewUser(@RequestBody User user) {
         userService.addUser(user);
-        return user;
+        return ResponseEntity.ok().body(user);
     }
 
-    @PutMapping("/update")
-    public User updateUser(@RequestBody User user) { // работате в почтальоне
+    @PutMapping("/update")   // работает в почтальоне
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.updateUser(user);
-        return user;
+        return ResponseEntity.ok().body(user);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) { //работате в почтальоне
+    @DeleteMapping("/delete/{id}")    //работает в почтальоне
+    public ResponseEntity<User> deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return "User with ID = " + id + " was deleted";
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/getAuthorizedUser")  //работает в почтальоне
+    public ResponseEntity<User> getAuthorizedUser() {
+        User authorizedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok().body(authorizedUser);
     }
 
 }
-
-
-
-
 
 
 
