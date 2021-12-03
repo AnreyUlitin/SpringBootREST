@@ -1,28 +1,29 @@
 package SpringRest.controller;
 
-
+import SpringRest.model.*;
+import SpringRest.service.*;
 import java.util.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
+import org.springframework.security.core.context.*;
 import org.springframework.web.bind.annotation.*;
-import SpringRest.model.Role;
-import SpringRest.model.User;
-import SpringRest.service.RoleService;
-import SpringRest.service.UserService;
-import org.springframework.web.bind.annotation.RestController;
-
-
 
 @RestController
-public class UserRestController {
+public class RestUserController {
 
     private final UserService userService;
     private final RoleService roleService;
 
     @Autowired
-    public UserRestController(UserService userService, RoleService roleService) {
+    public RestUserController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
+    }
+
+    @GetMapping("/getAuthorizedUser")
+    public ResponseEntity<User> getAuthorizedUser() {
+        User authorizedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok().body(authorizedUser);
     }
 
     @GetMapping("/getAllUsers")
@@ -31,13 +32,12 @@ public class UserRestController {
     }
 
     @GetMapping("/getAllRoles")
-    public ResponseEntity<List<Role>> getAllRoles() {
+    public ResponseEntity<Set<Role>> getAllRoles() {
         return ResponseEntity.ok().body(roleService.getAllRoles());
     }
 
-
     @GetMapping("/getUserById/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(userService.getUserById(id));
     }
 
@@ -60,16 +60,3 @@ public class UserRestController {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

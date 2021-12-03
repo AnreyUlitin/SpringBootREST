@@ -1,49 +1,56 @@
 package SpringRest.service;
 
-import SpringRest.model.*;
-import java.util.Set;
+import SpringRest.model.Role;
+import SpringRest.model.User;
+import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.stereotype.*;
-
-
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
-public class UserTestData {
+class UserTestData {
 
-    RoleService roleService;
-    UserService userService;
+    private final RoleService roleService;
+    private final UserService userService;
 
-    @Autowired
     public UserTestData(RoleService roleService, UserService userService) {
         this.roleService = roleService;
         this.userService = userService;
     }
 
     @PostConstruct
-    public void loadTestUser() {
-        Role role1 = new Role("ROLE_ADMIN");
-        Role role2 = new Role("ROLE_USER");
-        roleService.addRole(role1);
-        roleService.addRole(role2);
+    public void userTestData() {
+        Set<Role> allRoles = new HashSet<>();
+        allRoles.add(new Role("ROLE_ADMIN"));
+        allRoles.add(new Role("ROLE_USER"));
+        roleService.addRole(allRoles);
 
-        User user1 = new User("first_user_name_1", "last_user_name_1", 26,"user1@bk", "user1");
-        User user2 = new User("first_user_name_2", "last_user_name_2", 27,"user2@bk", "user2");
-        User user3 = new User("first_user_name_3", "last_user_name_3", 28,"user3@bk", "user3");
-        User user4 = new User("first_user_name_4", "last_user_name_4", 29,"user4@bk", "user4");
-        User user5 = new User("first_user_name_5", "last_user_name_5", 30,"user5@bk", "user5");
-        User user6 = new User("first_user_name_6", "last_user_name_6", 31,"user6@bk", "user6");
-        user1.setRoles(Set.of(role1, role2));
-        user2.setRoles(Set.of(role1));
-        user3.setRoles(Set.of(role1));
-        user4.setRoles(Set.of(role2));
-        user5.setRoles(Set.of(role2));
-        user6.setRoles(Set.of(role2,role1));
+        User user1 = new User("first_user_name_1", "last_name_1", 27, "user1@bk", "user1");
+        user1.setRoles("ROLE_ADMIN, ROLE_USER");
         userService.addUser(user1);
+
+        User user2 = new User("first_user_name_2", "last_user_name_2", 28,"user2@bk", "user2");
+        user2.setRoles("ROLE_USER");
         userService.addUser(user2);
+
+        User user3 = new User("first_user_name_3", "last_user_name_3", 29,"user3@bk", "user3");
+        user3.setRoles("ROLE_USER");
         userService.addUser(user3);
+
+        User user4 = new User("first_user_name_4", "last_user_name_4", 30,"user4@bk", "user4");
+        user4.setRoles("ROLE_USER");
         userService.addUser(user4);
+
+        User user5 = new User("first_user_name_5", "last_user_name_5", 31,"user5@bk", "user5");
+        user5.setRoles("ROLE_USER");
         userService.addUser(user5);
+
+        User user6 = new User("first_user_name_6", "last_user_name_6", 32,"user6@bk", "user6");
+        user6.setRoles("ROLE_ADMIN");
         userService.addUser(user6);
     }
 }
+
+
+

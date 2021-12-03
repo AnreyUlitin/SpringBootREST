@@ -1,12 +1,11 @@
 package SpringRest.service;
 
-import SpringRest.model.Role;
-import SpringRest.repository.RoleRepository;
-import java.util.List;
-import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import SpringRest.model.*;
+import SpringRest.repository.*;
+import java.util.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
 @Service
 @Transactional
@@ -14,33 +13,32 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
 
-
     @Autowired
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
 
     @Override
-    public void addRole(Role role) {
-        roleRepository.save(role);
+    public void addRole(Set<Role> role) {
+        roleRepository.saveAll(role);
     }
-
 
     @Override
     public void updateRole(Role role) {
         roleRepository.save(role);
     }
 
-
     @Override
     public void deleteRoleById(Long id) {
         roleRepository.deleteById(id);
     }
 
-
     @Override
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+    public Set<Role> getAllRoles() {
+        Iterable<Role>  iterable = roleRepository.findAll();
+        Set<Role> set = new HashSet<>();
+        iterable.forEach(set::add);
+        return set;
     }
 
     @Override
@@ -48,13 +46,8 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.getById(id);
     }
 
-
     @Override
     public Role getRoleByRole(String role) {
         return roleRepository.getRoleByRole(role);
     }
 }
-
-
-
-

@@ -1,14 +1,15 @@
 package SpringRest.security;
 
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.*;
-import org.springframework.security.config.annotation.authentication.builders.*;
-import org.springframework.security.config.annotation.web.builders.*;
-import org.springframework.security.config.annotation.web.configuration.*;
-import org.springframework.security.core.userdetails.*;
-import org.springframework.security.crypto.bcrypt.*;
-
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -18,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
 
     @Autowired
-    public SecurityConfig(@Qualifier(value = "userDetailsServiceImpl") UserDetailsService userDetailsService, SuccessUserHandler successUserHandler) {
+    public SecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, SuccessUserHandler successUserHandler) {
         this.userDetailsService = userDetailsService;
         this.successUserHandler = successUserHandler;
     }
@@ -32,21 +33,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/", "/login", "/logout").permitAll()
+                .antMatchers( "/", "/login", "/logout").permitAll()
                 .antMatchers("/user/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
                 .antMatchers("/admin/**").access("hasAnyRole('ROLE_ADMIN')")
                 .and()
                 .formLogin()
+                .loginPage("/login")
                 .successHandler(successUserHandler)
+                .loginProcessingUrl("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .and()
                 .csrf().disable();
-
     }
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -54,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 }
+
 
 
 

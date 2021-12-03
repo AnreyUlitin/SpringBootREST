@@ -1,11 +1,9 @@
 package SpringRest.service;
 
-
 import SpringRest.repository.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.*;
-
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -21,6 +19,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.getByUsername(username);
     }
-
 }
-

@@ -1,25 +1,13 @@
 package SpringRest.model;
 
-
+import java.util.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import java.util.Collection;
-import java.util.Set;
-
-
+import javax.persistence.*;
+import org.hibernate.annotations.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.userdetails.*;
 
 @Entity
 @Table(name = "users")
@@ -30,39 +18,46 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   @Column(name = "first_name")
-    private String firstname;
+    @Column(name = "firstName")
+    private String firstName;
 
-    @Column(name = "last_name")
-    private String lastname;
+    @Column(name = "lastName")
+    private String lastName;
 
-   @Column(name = "age")
-   private int age;
+    @Column(name = "age")
+    private int age;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String username;
 
-        @Column(name = "password")
+    @Column(name = "password")
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @Fetch(FetchMode.JOIN)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-
     private Set<Role> roles;
 
     public User() {
     }
 
-    public User(String firstname, String lastname, int age, String username, String password) {
-        this.firstname = firstname;
-        this.lastname = lastname;
+    public User(String firstName, String lastName, int age, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.age = age;
         this.username = username;
         this.password = password;
     }
 
+    public User(String firstName, String lastName, int age, String username, String password, Set<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
 
     public Long getId() {
         return id;
@@ -72,27 +67,27 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(byte age) {
         this.age = age;
     }
 
@@ -118,21 +113,15 @@ public class User implements UserDetails {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", age=" + age +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + roles +
-                '}';
+    public void setRoles(String roles) {
+        this.roles = new HashSet<>();
+        if (roles.contains("ROLE_ADMIN")) {
+            this.roles.add(new Role("ROLE_ADMIN"));
+        }
+        if (roles.contains("ROLE_USER")) {
+            this.roles.add(new Role("ROLE_USER"));
+        }
     }
 
     @Override
@@ -160,5 +149,16 @@ public class User implements UserDetails {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 }
-

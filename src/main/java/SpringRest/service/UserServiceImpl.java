@@ -1,13 +1,11 @@
 package SpringRest.service;
 
-import SpringRest.model.User;
-import SpringRest.repository.UserRepository;
+import SpringRest.model.*;
+import SpringRest.repository.*;
 import java.util.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.security.crypto.password.*;
+import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
 @Service
 @Transactional
@@ -16,7 +14,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -28,6 +25,10 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public User getUser(Long id) {
+        return userRepository.getById(id);
+    }
 
     @Override
     public void updateUser(User user) {
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+
     @Override
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
@@ -52,19 +54,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.getByUsername(username);
     }
 
-
-    @Override
-    public User getUser(Long id) {
-        return userRepository.getById(id);
-    }
-
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
 }
-
-
-
 
