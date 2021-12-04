@@ -72,14 +72,14 @@ function newUser() {
                         '<td> <button type="button" onclick="modalDelete(' + user.id + ')" class="btn btn-danger">Delete</button> </td>' +
                         '</tr>');
 
-                window.formNewUser.newFirstName.value = "";
-                window.formNewUser.newLastName.value = "";
-                window.formNewUser.newAge.value = "";
-                window.formNewUser.newUsername.value = "";
-                window.formNewUser.newPassword.value = "";
-                window.formNewUser.newRoles.value = "";
-
-                    $('#NewUserCreated').modal();
+                // window.formNewUser.newFirstName.value = "";
+                // window.formNewUser.newLastName.value = "";
+                // window.formNewUser.newAge.value = "";
+                // window.formNewUser.newUsername.value = "";
+                // window.formNewUser.newPassword.value = "";
+                // window.formNewUser.newRoles.value = "";
+                //
+                //     $('#NewUserCreated').modal();
             });
 }
 
@@ -296,6 +296,10 @@ function Header() {
                     //записываем в header_roles в виде строки (.innerHTML) роль юзера, например with roles: ROLE_ADMIN
                     document.getElementById("header_roles").innerHTML = ' with roles: ' + rolesList.textContent;
             });
+
+    src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossOrigin="anonymous"
 }
 
 function editUser() {

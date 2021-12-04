@@ -1,7 +1,8 @@
-package SpringRest.service;
+package SpringRest;
 
 import SpringRest.model.Role;
 import SpringRest.model.User;
+import SpringRest.service.*;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
